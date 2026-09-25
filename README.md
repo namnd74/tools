@@ -68,3 +68,56 @@ Thiết lập môi trường Kali Linux trên WSL2 kèm các công cụ Pentest 
 chmod +x setup-kali-wsl.sh
 ./setup-kali-wsl.sh
 ```
+
+---
+
+### 6. `Install-WSL-Docker.bat` / `Install-WSL-Docker.ps1` - Cài đặt WSL2 + Ubuntu + Docker Engine (Windows 1-Click)
+Script tự động cài đặt toàn bộ stack WSL2 + Docker Engine (không phụ thuộc Docker Desktop):
+- **Bước 1**: Kiểm tra phiên bản Windows (cần Build >= 19041 cho WSL2).
+- **Bước 2**: Tự động kích hoạt tính năng `Microsoft-Windows-Subsystem-Linux` & `VirtualMachinePlatform`.
+- **Bước 3**: Cập nhật WSL kernel (`wsl --update`), đặt WSL2 làm mặc định.
+- **Bước 4**: Cài đặt Ubuntu (Ubuntu-22.04 LTS).
+- **Bước 5**: Khởi tạo Ubuntu WSL lần đầu.
+- **Bước 6**: Tự động chuyển giao và chạy `setup-docker-wsl.sh` bên trong WSL để hoàn tất cài Docker Engine.
+
+```cmd
+:: Chạy file .bat (Click đúp chuột hoặc chạy từ cmd với quyền Admin)
+Install-WSL-Docker.bat
+```
+
+Hoặc chạy từ PowerShell Administrator:
+```powershell
+powershell -ExecutionPolicy Bypass -File "F:\tools\Install-WSL-Docker.ps1"
+```
+
+---
+
+### 7. `setup-docker-wsl.sh` - Cài đặt Docker Engine bên trong Ubuntu WSL2
+Script chuyên dụng chạy bên trong môi trường Linux (Ubuntu/Debian) trên WSL2:
+- Gỡ các package docker cũ / xung đột (nếu có).
+- Thêm Docker official GPG key và APT repository.
+- Cài đặt đầy đủ bộ Docker Engine: `docker-ce`, `docker-ce-cli`, `containerd.io`, `docker-buildx-plugin`, `docker-compose-plugin`.
+- Tự động thêm user hiện tại vào nhóm `docker` (chạy lệnh docker không cần `sudo`).
+- Cấu hình `/etc/docker/daemon.json` tối ưu cho môi trường WSL2.
+- Tự động thêm script kiểm tra và khởi động Docker daemon vào `~/.bashrc` / `~/.zshrc`.
+
+```bash
+# Chạy bên trong Ubuntu WSL
+chmod +x setup-docker-wsl.sh
+./setup-docker-wsl.sh
+
+# Hoặc gọi từ PowerShell Windows
+wsl -d Ubuntu-22.04 -- bash /mnt/f/tools/setup-docker-wsl.sh
+```
+
+---
+
+### 8. `activate.ps1` / `activate.bat` - Kích hoạt môi trường Portable (Node.js & Git)
+- Tự động nạp `F:\tools\nodejs` và `F:\tools\git\cmd` vào PATH.
+- Tự động dọn dẹp các biến môi trường xung đột (như `GIT_DIR`).
+- Tự động kích hoạt cho các terminal mới qua PowerShell Profile.
+
+```powershell
+# Chạy thủ công nếu cần
+. F:\tools\activate.ps1
+```

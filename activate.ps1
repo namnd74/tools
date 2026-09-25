@@ -1,4 +1,6 @@
 # Kich hoat moi truong Node.js & Git Portable cho session PowerShell hien tai
+if ($global:ToolsEnvActivated) { return }
+
 $ToolsDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 if (-not $ToolsDir) { $ToolsDir = $PSScriptRoot }
 if (-not $ToolsDir) { $ToolsDir = "F:\tools" }
@@ -17,10 +19,11 @@ $newPaths = @($NodeDir, $GitDir) + ($currentPaths | Where-Object {
 })
 $env:Path = $newPaths -join ';'
 
+$global:ToolsEnvActivated = $true
+
 Write-Host "====================================================" -ForegroundColor Cyan
 Write-Host "  Moi truong Node.js & Git Portable da san sang!" -ForegroundColor Cyan
 Write-Host "====================================================" -ForegroundColor Cyan
-try { Write-Host "Node: $(node -v 2>&1)"    -ForegroundColor Green } catch { Write-Host "Node: KHONG TIM THAY" -ForegroundColor Red }
-try { Write-Host "NPM:  v$(npm -v 2>&1)"   -ForegroundColor Green } catch { Write-Host "NPM:  KHONG TIM THAY" -ForegroundColor Red }
+try { Write-Host "Node: $(node -v 2>&1)"        -ForegroundColor Green } catch { Write-Host "Node: KHONG TIM THAY" -ForegroundColor Red }
 try { Write-Host "Git:  $(git --version 2>&1)" -ForegroundColor Green } catch { Write-Host "Git:  KHONG TIM THAY" -ForegroundColor Red }
 Write-Host "====================================================" -ForegroundColor Cyan
